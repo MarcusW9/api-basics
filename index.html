@@ -1,0 +1,46 @@
+<!-- nDxeTUOdMw3YdgcdKrSrL48AMq4ifT8V -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <link href="style.css" rel="stylesheet">
+</head>
+<body>
+    <span id="error-message"></span>
+    <input placeholder="Search for gif"></input>
+    <img src="#">
+    <button>Refresh</button>
+    <script>
+        const errorMessage = document.querySelector('#error-message')
+        const input = document.querySelector('input')
+
+        const img = document.querySelector('img');
+        const fetchImg = (searchTerm = "cats") => {
+            fetch(`https://api.giphy.com/v1/gifs/translate?api_key=nDxeTUOdMw3YdgcdKrSrL48AMq4ifT8V&s=${searchTerm}`, {mode: 'cors'})
+            .then(response => {
+                if (response.status >= 200 && response.status < 300) {
+                    errorMessage.textContent = ``;
+                    return response.json();
+                }
+                errorMessage.textContent = `There was an error: ${response.status}`;
+                return Promise.resolve({ data: { images: { original: { url: `https://media1.giphy.com/media/Ov5NiLVXT8JEc/giphy.gif?cid=b72eeb4ages31dmikdwaraznw6ei353qjufseigio0yv7tdu&ep=v1_gifs_translate&rid=giphy.gif&ct=g` } } } })
+            })
+            .then(data => img.src = data.data.images.original.url)
+            .catch(error => console.error(`There was an ${error} this is an error`))
+        }
+
+        fetchImg("cats")
+
+        const btn = document.querySelector('button')
+        btn.addEventListener("click", (e) => {
+            if (input.value && input.value != "") {
+            fetchImg(input.value)
+        } else {
+            fetchImg()
+        }
+        })
+    </script>
+</body>
+</html>
